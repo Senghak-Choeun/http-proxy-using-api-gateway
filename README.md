@@ -1,1 +1,1 @@
-use `$bash start.sh` if using bash terminal to run all microservices
+use `$bash start.sh` if using bash terminal to run all microservices6
