@@ -20,16 +20,22 @@ const PORT = process.env.PORT || 5002;
 // Login Endpoint
 // Accessible via Gateway: POST http://localhost:4000/auth/login
 app.post('/login', async (req, res) => {
-  const { emailid, pass } = req.body;
+  const { emailid, pass, role } = req.body;
 
-  if (!emailid || !pass) {
-    return res.status(400).json({ message: 'Please provide emailid and pass' });
+  // 1. Validate that role, emailid, and pass are present in request body
+  if (!emailid || !pass || !role) {
+    return res.status(400).json({ message: 'Please provide emailid, pass, and role' });
   }
 
   try {
     const person = await Person.findOne({ emailid });
     if (!person) {
       return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // 2. Validate that the requested role matches the user's assigned role in DB
+    if (person.role !== role) {
+      return res.status(403).json({ message: 'Access denied: Role mismatch' });
     }
 
     const isMatch = await bcrypt.compare(pass, person.pass);
