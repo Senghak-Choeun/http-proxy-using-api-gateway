@@ -18,7 +18,7 @@ connectDB();
 const PORT = process.env.PORT || 5002;
 
 // Login Endpoint
-// Accessible via Gateway: POST http://localhost:4000/auth/login
+// Accessible via Gateway: POST http://<gateway-host>:4000/auth/login
 app.post('/login', async (req, res) => {
   const { emailid, pass, role } = req.body;
 

@@ -14,7 +14,7 @@ app.use(cors());
 connectDB();
 
 // Registration Endpoint
-// Accessible via Gateway: POST http://localhost:4000/register/userregister
+// Accessible via Gateway: POST http://<gateway-host>:4000/register/userregister
 app.post('/userregister', async (req, res) => {
   const { name, emailid, pass, mobile, role } = req.body;
 

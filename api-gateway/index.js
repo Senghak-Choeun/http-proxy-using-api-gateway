@@ -19,6 +19,10 @@ proxy.on('error', (err, req, res) => {
 });
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const REGISTER_SERVICE_HOST = process.env.REGISTER_SERVICE_HOST;
+const LOGIN_SERVICE_HOST = process.env.LOGIN_SERVICE_HOST;
+const ADMIN_SERVICE_HOST = process.env.ADMIN_SERVICE_HOST;
+const USER_SERVICE_HOST = process.env.USER_SERVICE_HOST;
 
 // Middleware: Authenticate JWT Token
 function authToken(req, res, next) {
@@ -51,25 +55,25 @@ function authRole(role) {
 // 1. REGISTER ROUTE (Public) -> Target: Port 5001
 app.use('/register', (req, res) => {
   console.log('[Gateway] Routing to Register Service');
-  proxy.web(req, res, { target: 'http://localhost:5001' });
+  proxy.web(req, res, { target: `http://${REGISTER_SERVICE_HOST}:5001` });
 });
 
 // 2. AUTH ROUTE (Public Login for User/Admin) -> Target: Port 5002
 app.use('/auth', (req, res) => {
   console.log('[Gateway] Routing to Authentication Service');
-  proxy.web(req, res, { target: 'http://localhost:5002' });
+  proxy.web(req, res, { target: `http://${LOGIN_SERVICE_HOST}:5002` });
 });
 
 // 3. ADMIN ROUTE (Admin only) -> Target: Port 5003
 app.use('/admin', authToken, authRole('admin'), (req, res) => {
   console.log('[Gateway] Routing to Admin Service');
-  proxy.web(req, res, { target: 'http://localhost:5003' });
+  proxy.web(req, res, { target: `http://${ADMIN_SERVICE_HOST}:5003` });
 });
 
 // 4. USER ROUTE (User only) -> Target: Port 5004
 app.use('/user', authToken, authRole('user'), (req, res) => {
   console.log('[Gateway] Routing to User Service');
-  proxy.web(req, res, { target: 'http://localhost:5004' });
+  proxy.web(req, res, { target: `http://${USER_SERVICE_HOST}:5004` });
 });
 
 const PORT = process.env.PORT || 4000;
