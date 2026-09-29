@@ -1,0 +1,27 @@
+
+services:
+  registration-service:
+    build:
+      context: ./registration-service
+      dockerfile: Dockerfile
+    container_name: registration_service
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - MONGO_URI=${MONGO_URI}
+    restart: always
+
+  login-service:
+    build:
+      context: ./login-service
+      dockerfile: Dockerfile
+    container_name: login_service
+    ports:
+      - "5002:5002"
+    environment:
+      - NODE_ENV=production
+      - PORT=5002
+      - MONGO_URI=${MONGO_URI}
+    restart: always
